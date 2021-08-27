@@ -49,6 +49,7 @@ public class InIntergrationFlow {
                 .handle(message -> {
                         imageResizer.resizeImage(in, in.getPath());message.getPayload();// send event through fileStatus channel
                 })
+                //.handle(imageResizer.resizeImage(in, in.getPath()); i think this more practise
                 .transform(zipTransformer)
                 .handle(Files.outboundAdapter(out)
                         .autoCreateDirectory(true)
