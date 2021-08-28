@@ -37,10 +37,15 @@
 
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-webflux</artifactId>
-
+			<groupId>org.imgscalr</groupId>
+			<artifactId>imgscalr-lib</artifactId>
+			<version>4.2</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.integration</groupId>-->
+<!--			<artifactId>spring-integration-webflux</artifactId>-->
+
+<!--		</dependency>-->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -55,11 +60,11 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.data</groupId>
-			<artifactId>spring-data-commons</artifactId>
-			<version>2.5.3</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springframework.data</groupId>-->
+<!--			<artifactId>spring-data-commons</artifactId>-->
+<!--			<version>2.5.3</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

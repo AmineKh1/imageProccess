@@ -1,11 +1,20 @@
 package com.example.imageProccess.service;
 
+import org.imgscalr.Scalr;
+import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.util.HashSet;
+import java.util.List;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
+@Service
 public class ImageResizer {
     /**
      * Resizes an image to a absolute width and height (the image may not be
@@ -16,28 +25,36 @@ public class ImageResizer {
      * @param scaledHeight absolute height in pixels
      * @throws IOException
      */
-    public static void resize(String inputImagePath,
-                              String outputImagePath, int scaledWidth, int scaledHeight)
+    public static File resize(String inputImagePath,
+                              String outputImagePath,
+                              int scaledWidth,
+                              int scaledHeight)
             throws IOException {
         // reads input image
         File inputFile = new File(inputImagePath);
         BufferedImage inputImage = ImageIO.read(inputFile);
 
         // creates output image
-        BufferedImage outputImage = new BufferedImage(scaledWidth,
-                scaledHeight, inputImage.getType());
+//        BufferedImage outputImage = new BufferedImage(scaledWidth,
+//                scaledHeight, inputImage.getType());
 
+      var  outputImage =  Scalr.resize(inputImage, scaledWidth, scaledHeight,null);
         // scales the input image to the output image
-        Graphics2D g2d = outputImage.createGraphics();
-        g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
-        g2d.dispose();
+//        Graphics2D g2d = outputImage.createGraphics();
+//
+//        g2d.drawImage(inputImage, 0, 0, scaledWidth, scaledHeight, null);
+//        g2d.dispose();
 
         // extracts extension of output file
         String formatName = outputImagePath.substring(outputImagePath
                 .lastIndexOf(".") + 1);
 
         // writes to output file
-        ImageIO.write(outputImage, formatName, new File(outputImagePath));
+        File output = new File(outputImagePath);
+     //   return ImageIO.createImageOutputStream(outputImage);
+        if ( ImageIO.write(outputImage, formatName, output))
+            return output;
+        return null;
     }
 
     /**
@@ -48,37 +65,41 @@ public class ImageResizer {
      * over the input image.
      * @throws IOException
      */
-    public static void resize(String inputImagePath,
-                              String outputImagePath, double percent) throws IOException {
+    public static File resize(String inputImagePath,
+                              String outputImagePath,
+                              double percent) throws IOException {
         File inputFile = new File(inputImagePath);
         BufferedImage inputImage = ImageIO.read(inputFile);
         int scaledWidth = (int) (inputImage.getWidth() * percent);
         int scaledHeight = (int) (inputImage.getHeight() * percent);
-        resize(inputImagePath, outputImagePath, scaledWidth, scaledHeight);
+      return   resize(inputImagePath, outputImagePath, scaledWidth, scaledHeight);
     }
-    public void resizeImage(File file,
-                            String outputImagePath){
-        String outputImagePath1 = outputImagePath + "/" + file.getName() + "_Medium.jpg";
-        String outputImagePath2 = outputImagePath + "/" + file.getName() + "_Small.jpg";
-        String outputImagePath3 = outputImagePath + "/" + file.getName() + "Big.jpg";
+
+    public Set<File> resizeImage(File file,
+                                 String outputImagePath){
+
+        String basename = file.getName().split("\\.")[0];
+        String ext = file.getName().split("\\.")[1];
+        String outputImagePath1 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_meduim",ext);
+        String outputImagePath2 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_small",ext);
+        String outputImagePath3 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_large",ext);
 
 
         try {
-
+            Set<File> set = new HashSet();
             int scaledWidth = 1024;
             int scaledHeight = 768;
-            ImageResizer.resize(file.getPath(), outputImagePath1, scaledWidth, scaledHeight);
-
-            double percent = 0.5;
-            ImageResizer.resize(file.getPath(), outputImagePath2, percent);
-
-            percent = 1.5;
-            ImageResizer.resize(file.getPath(), outputImagePath3, percent);
-
+           set.add( ImageResizer.resize(file.getPath(), outputImagePath1,1));
+            double percent = 0.7;
+            set.add(ImageResizer.resize(file.getPath(), outputImagePath2, percent));
+            percent = 1.3;
+            set.add(ImageResizer.resize(file.getPath(), outputImagePath3, percent));
+            return set;
         } catch (IOException ex) {
             System.out.println("Error resizing the image.");
             ex.printStackTrace();
         }
+        return null;
     }
 
 
