@@ -80,19 +80,19 @@ public class ImageResizer {
 
         String basename = file.getName().split("\\.")[0];
         String ext = file.getName().split("\\.")[1];
-        String outputImagePath1 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_meduim",ext);
+        String outputImagePath1 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_medium",ext);
         String outputImagePath2 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_small",ext);
         String outputImagePath3 = String.format("%s/%s%s.%s",outputImagePath ,basename , "_large",ext);
 
 
         try {
-            Set<File> set = new HashSet();
-            int scaledWidth = 1024;
-            int scaledHeight = 768;
+          var set = new HashSet<File>();
+//            int scaledWidth = 1024;
+//            int scaledHeight = 768;
            set.add( ImageResizer.resize(file.getPath(), outputImagePath1,1));
-            double percent = 0.7;
+            double percent = 0.5;
             set.add(ImageResizer.resize(file.getPath(), outputImagePath2, percent));
-            percent = 1.3;
+            percent = 1.5;
             set.add(ImageResizer.resize(file.getPath(), outputImagePath3, percent));
             return set;
         } catch (IOException ex) {
