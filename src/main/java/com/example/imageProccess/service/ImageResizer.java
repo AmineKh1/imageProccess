@@ -16,15 +16,7 @@ import java.util.Set;
 
 @Service
 public class ImageResizer {
-    /**
-     * Resizes an image to a absolute width and height (the image may not be
-     * proportional)
-     * @param inputImagePath Path of the original image
-     * @param outputImagePath Path to save the resized image
-     * @param scaledWidth absolute width in pixels
-     * @param scaledHeight absolute height in pixels
-     * @throws IOException
-     */
+
     public static File resize(String inputImagePath,
                               String outputImagePath,
                               int scaledWidth,
@@ -57,14 +49,6 @@ public class ImageResizer {
         return null;
     }
 
-    /**
-     * Resizes an image by a percentage of original size (proportional).
-     * @param inputImagePath Path of the original image
-     * @param outputImagePath Path to save the resized image
-     * @param percent a double number specifies percentage of the output image
-     * over the input image.
-     * @throws IOException
-     */
     public static File resize(String inputImagePath,
                               String outputImagePath,
                               double percent) throws IOException {
